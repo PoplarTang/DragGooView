@@ -8,3 +8,6 @@ A wonderful feature to clear the unread reminder
 
 ##Dependency
 [nineoldandroids-2.4.0.jar](https://github.com/JakeWharton/NineOldAndroids)
+
+##Procedure
+![](https://github.com/PoplarTang/raw/blob/master/images/procedure.gif)

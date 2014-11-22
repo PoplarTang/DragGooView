@@ -114,7 +114,7 @@ public class MainActivity extends ListActivity {
 					mRemoved.add(number);
 					notifyDataSetChanged();
 
-					showToast(getContext(), "Cheers! we have get rid of it!");
+					showToast(getContext(), "Cheers! We have get rid of it!");
 				}
 
 				@Override

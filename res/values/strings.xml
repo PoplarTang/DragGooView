@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DragGooView</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_touch_screen">TouchScreenActivity</string>
+    <string name="title_activity_touch_test">TouchTestActivity</string>
+
+</resources>

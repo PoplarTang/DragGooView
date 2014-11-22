@@ -1,0 +1,13 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <com.poplar.drawdemo.ui.ChildView
+        android:id="@+id/childView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+		android:background="#ee888888" />
+
+</RelativeLayout>

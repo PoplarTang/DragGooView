@@ -1,4 +1,4 @@
-#Drag Goo View
+Drag Goo View
 ===========
 
 Throw all of the unread reminder.

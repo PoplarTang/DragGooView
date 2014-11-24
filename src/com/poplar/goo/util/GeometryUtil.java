@@ -54,7 +54,7 @@ public class GeometryUtil {
 	 * @param lineK The slope of line which cross the pMiddle.
 	 * @return
 	 */
-	public static PointF[] getResults(PointF pMiddle, float radius, Double lineK) {
+	public static PointF[] getIntersectionPoints(PointF pMiddle, float radius, Double lineK) {
 		PointF[] points = new PointF[2];
 		
 		float radian, xOffset = 0, yOffset = 0; 

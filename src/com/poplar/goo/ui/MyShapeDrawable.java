@@ -147,34 +147,40 @@ public class MyShapeDrawable extends View {
 	private ShapeDrawable drawGooView() {
 		Path path = new Path();
 		
+		//计算出经过两圆圆心连线的垂线的斜率dragLineK。
 		float xDiff = mStickCenter.x - mDragCenter.x;
 		Double dragLineK = null;
 		if(xDiff != 0){
 			dragLineK = (double) ((mStickCenter.y - mDragCenter.y) / xDiff);
 		}
+		
+		//根据当前两圆圆心的距离计算出固定圆的半径
 		float distance = (float) GeometryUtil.getDistanceBetween2Points(mDragCenter, mStickCenter);
 		stickCircleTempRadius = getCurrentRadius(distance);
 		
+		//以两圆连线的0.618处作为 贝塞尔曲线 的控制点。（个人随便选的比例，感觉这个比例比较神圣）
 		PointF pointByPercent = GeometryUtil.getPointByPercent(mDragCenter, mStickCenter, 0.618f);
 		
-		PointF[] dragPoints = GeometryUtil.getResults(mDragCenter, dragCircleRadius, dragLineK);
-		PointF[] stickPoints = GeometryUtil.getResults(mStickCenter, stickCircleTempRadius, dragLineK);
+		//分别获得经过两圆圆心连线的垂线与圆的交点（两条垂线平行，所以斜率dragLineK相等）。
+		PointF[] dragPoints = GeometryUtil.getIntersectionPoints(mDragCenter, dragCircleRadius, dragLineK);
+		PointF[] stickPoints = GeometryUtil.getIntersectionPoints(mStickCenter, stickCircleTempRadius, dragLineK);
 
+		//此处见Github示意图{@link https://github.com/PoplarTang/DragGooView}
 		path.moveTo((float)stickPoints[0].x, (float)stickPoints[0].y);
 		path.quadTo((float)pointByPercent.x, (float)pointByPercent.y,
 				(float)dragPoints[0].x, (float)dragPoints[0].y);
-		
 		path.lineTo((float)dragPoints[1].x, (float)dragPoints[1].y);
 		path.quadTo((float)pointByPercent.x, (float)pointByPercent.y,
 				(float)stickPoints[1].x, (float)stickPoints[1].y);
-		
 		path.close();
 		
+		//将四个交点画到屏幕上
 //		path.addCircle((float)dragPoints[0].x, (float)dragPoints[0].y, 5, Direction.CW);
 //		path.addCircle((float)dragPoints[1].x, (float)dragPoints[1].y, 5, Direction.CW);
 //		path.addCircle((float)stickPoints[0].x, (float)stickPoints[0].y, 5, Direction.CW);
 //		path.addCircle((float)stickPoints[1].x, (float)stickPoints[1].y, 5, Direction.CW);
 		
+		//构建ShapeDrawable
 		ShapeDrawable shapeDrawable = new ShapeDrawable(new PathShape(path, 50f, 50f));
 		shapeDrawable.getPaint().setColor(Color.RED);
 		return shapeDrawable;
@@ -193,7 +199,7 @@ public class MyShapeDrawable extends View {
 		float fraction = 0.2f + 0.8f * distance / farest;
 		
 		// Distance -> Farthest
-		// stickCircleRadius(15f) -> stickCircleMinRadius(5f)
+		// stickCircleRadius -> stickCircleMinRadius
 		float evaluateValue = (float) GeometryUtil.evaluateValue(fraction, stickCircleRadius, stickCircleMinRadius);
 		return evaluateValue;
 	}
@@ -226,6 +232,7 @@ public class MyShapeDrawable extends View {
 			}
 			case MotionEvent.ACTION_MOVE:{
 				
+				//如果两圆间距大于最大距离farest，执行拖拽结束动画
 				PointF p0 = new PointF(mDragCenter.x, mDragCenter.y);
 				PointF p1 = new PointF(mStickCenter.x, mStickCenter.y);
 				if(GeometryUtil.getDistanceBetween2Points(p0,p1) > farest){
@@ -239,6 +246,7 @@ public class MyShapeDrawable extends View {
 						
 						@Override
 						public void onAnimationUpdate(ValueAnimator animation) {
+							//这里通过不断改变mStickCenter来实现动画效果
 							float fraction = animation.getAnimatedFraction();
 							PointF pointByPercent = GeometryUtil.getPointByPercent(startPoint, endPoint, 1 - fraction);
 							updateStickCenter((float)pointByPercent.x, (float)pointByPercent.y);
@@ -315,6 +323,8 @@ public class MyShapeDrawable extends View {
 			// Otherwise
 			disappeared();
 		}else {
+			
+			//手指抬起时，弹回动画
 			mAnim = ValueAnimator.ofFloat(1.0f);
 			mAnim.setInterpolator(new OvershootInterpolator(4.0f));
 
@@ -350,6 +360,7 @@ public class MyShapeDrawable extends View {
 	protected void onDraw(Canvas canvas) {
 		
 		canvas.save();
+		//去除状态栏高度偏差
 		canvas.translate(0, -mStatusBarHeight);
 		
 		if(!isDisappear){

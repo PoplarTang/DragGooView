@@ -1,4 +1,4 @@
-package com.poplar.goo;
+package com.poplar.goo.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -20,6 +20,7 @@ import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 import com.poplar.goo.util.GeometryUtil;
+import com.poplar.goo.util.Utils;
 
 /**
  * This view should be added to WindowManager, so we can drag it to anywhere.
@@ -29,7 +30,7 @@ import com.poplar.goo.util.GeometryUtil;
 public class MyShapeDrawable extends View {
 	
 	interface OnDisappearListener {
-		void onDisappear();
+		void onDisappear(PointF mDragCenter);
 		void onReset(boolean isOutOfRange);
 	}
 
@@ -38,11 +39,11 @@ public class MyShapeDrawable extends View {
 	private PointF mInitCenter;
 	private PointF mDragCenter;
 	private PointF mStickCenter;
-	float dragCircleRadius = 15.0f;
-	float stickCircleRadius = 15.0f;
-	float stickCircleMinRadius = 5.0f;
+	float dragCircleRadius = 0;
+	float stickCircleRadius = 0;
+	float stickCircleMinRadius = 0;
 	float stickCircleTempRadius = stickCircleRadius;
-	float farest = 120f;
+	float farest = 0;
 	String text = "";
 
 	private Paint mPaintRed;
@@ -56,11 +57,21 @@ public class MyShapeDrawable extends View {
 	private boolean hasUp;
 	private Rect rect;
 	private int mStatusBarHeight;
+
+	private float resetDistance;
 	
 	
 	public MyShapeDrawable(Context context) {
 		super(context);
 
+		rect = new Rect(0, 0, 50, 50);
+		
+		stickCircleRadius = Utils.dip2Dimension(12.0f, context);
+		dragCircleRadius = Utils.dip2Dimension(12.0f, context);
+		stickCircleMinRadius = Utils.dip2Dimension(3.0f, context);
+		farest = Utils.dip2Dimension(80.0f, context);
+		resetDistance = Utils.dip2Dimension(40.0f, getContext());
+		
 		mPaintRed = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintRed.setColor(Color.RED);
 		
@@ -68,9 +79,6 @@ public class MyShapeDrawable extends View {
 		mTextPaint.setTextAlign(Align.CENTER);
 		mTextPaint.setColor(Color.WHITE);
 		mTextPaint.setTextSize(dragCircleRadius * 1.2f);
-		
-		rect = new Rect(0, 0, 50, 50);
-		
 	}
 
 	/**
@@ -105,8 +113,8 @@ public class MyShapeDrawable extends View {
 	public void initCenter(float x, float y){
 		mDragCenter = new PointF(x, y);
 		mStickCenter = new PointF(x, y);
-		
 		mInitCenter = new PointF(x, y);
+		invalidate();
 	}
 	
 	/**
@@ -291,14 +299,14 @@ public class MyShapeDrawable extends View {
 		invalidate();
 		
 		if(mListener != null){
-			mListener.onDisappear();
+			mListener.onDisappear(mDragCenter);
 		}
 	}
 	
 	private void handleActionUp() {
 		if(isOutOfRange){
 			// When user drag it back, we should call onReset().
-			if(GeometryUtil.getDistanceBetween2Points(mDragCenter, mInitCenter) < 30.0f){
+			if(GeometryUtil.getDistanceBetween2Points(mDragCenter, mInitCenter) < resetDistance){
 				if(mListener != null)
 					mListener.onReset(isOutOfRange);
 				return;

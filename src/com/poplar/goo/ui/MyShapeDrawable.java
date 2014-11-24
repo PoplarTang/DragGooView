@@ -66,8 +66,8 @@ public class MyShapeDrawable extends View {
 
 		rect = new Rect(0, 0, 50, 50);
 		
-		stickCircleRadius = Utils.dip2Dimension(12.0f, context);
-		dragCircleRadius = Utils.dip2Dimension(12.0f, context);
+		stickCircleRadius = Utils.dip2Dimension(10.0f, context);
+		dragCircleRadius = Utils.dip2Dimension(10.0f, context);
 		stickCircleMinRadius = Utils.dip2Dimension(3.0f, context);
 		farest = Utils.dip2Dimension(80.0f, context);
 		resetDistance = Utils.dip2Dimension(40.0f, getContext());

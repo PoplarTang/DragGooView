@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.PointF;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
@@ -17,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.poplar.goo.R;
-import com.poplar.goo.R.drawable;
 import com.poplar.goo.ui.MyShapeDrawable.OnDisappearListener;
 import com.poplar.goo.util.Utils;
 

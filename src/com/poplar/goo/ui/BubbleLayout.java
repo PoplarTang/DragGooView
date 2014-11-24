@@ -4,6 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
 
+/**
+ * @author PoplarTang
+ * To show the end animation(bubble burst)
+ *
+ */
 public class BubbleLayout extends FrameLayout {
 
 	public BubbleLayout(Context context) {

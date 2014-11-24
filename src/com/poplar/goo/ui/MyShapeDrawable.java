@@ -24,7 +24,7 @@ import com.poplar.goo.util.Utils;
 
 /**
  * This view should be added to WindowManager, so we can drag it to anywhere.
- * @author Poplar
+ * @author PoplarTang
  *
  */
 public class MyShapeDrawable extends View {
